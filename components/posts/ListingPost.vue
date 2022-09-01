@@ -1,9 +1,15 @@
 <template>
   <div class="card">
-    <div class="post">
+    <nuxt-link target="_blank" :to="`/posts/${post.id}`" class="post">
       <div class="post__header">{{ post.title }}</div>
       <div class="post__body">
-        <span class="post__content">{{ getPreviewText }}</span>
+        <p class="post__content">
+          {{ getPreviewText
+          }}<span v-if="isPostLong" class="post__more"
+            >...читать продолжение в источнике</span
+          >
+        </p>
+        <span class="post__date">Опубликовано {{ getPostDate }}</span>
       </div>
       <div class="post__footer">
         <span class="post__author">автор: </span>
@@ -13,7 +19,7 @@
           </button>
         </Tooltip>
       </div>
-    </div>
+    </nuxt-link>
   </div>
 </template>
 
@@ -28,7 +34,20 @@ export default {
   },
   computed: {
     getPreviewText() {
-      return this.post.content.substr(0, 100)
+      return this.isPostLong
+        ? this.post.content.substr(0, 100)
+        : this.post.content
+    },
+    isPostLong() {
+      return this.post.content.length > 100
+    },
+    getPostDate() {
+      return (
+        this.$moment
+          .unix(this.post.created_at.seconds, 'YYYY-MM-DD')
+          .format('DD.MM HH:mm') ||
+        this.$moment.utc(this.post.created_at).format('DD.MM HH:mm')
+      )
     }
   }
 }
@@ -38,11 +57,18 @@ export default {
 .post {
   display: flex;
   flex-direction: column;
+  color: rgb(25, 28, 31);
 
   &__header {
     border-radius: 10px 10px 0 0;
     color: #fff;
     background-color: rgb(25, 28, 31);
+  }
+
+  &__date {
+    margin-top: 24px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 60%);
   }
 
   &__footer {
@@ -53,6 +79,10 @@ export default {
   &__btn {
     height: 22px;
     font-size: 20px;
+    color: #19249e;
+  }
+
+  &__more {
     color: #19249e;
   }
 

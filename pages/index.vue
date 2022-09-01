@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div class="page__header">Новости</div>
+    <h2 class="page__header">Новости</h2>
     <Feed />
   </div>
 </template>

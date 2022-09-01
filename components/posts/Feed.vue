@@ -1,41 +1,38 @@
 <template>
   <div class="feed">
-    <div class="feed__posts">
-      <ul class="feed__list">
-        <li v-for="post in posts" :key="post.id">
-          <ListingPost :post="post" @getAll="getPostsByAuthor" />
-        </li>
-      </ul>
-    </div>
-    <Pagination
-      :totalPages="getTotalPages"
-      :currentPage="pagination.currentPage"
-    />
+    <template v-if="isLoading">
+      <div class="loading"></div>
+    </template>
+    <template v-else>
+      <SortSelector />
+      <div class="feed__posts">
+        <ul class="feed__list">
+          <li v-for="post in posts" :key="post.id">
+            <ListingPost :post="post" @getAll="getPostsByAuthor" />
+          </li>
+        </ul>
+      </div>
+      <Pagination
+        loadMore
+        :totalPages="getTotalPages"
+        :currentPage="pagination.currentPage"
+        @more="loadMore"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import ListingPost from './ListingPost'
 import Pagination from './Pagination.vue'
+import SortSelector from './SortSelector'
 
 export default {
   name: 'Feed',
-  components: { ListingPost, Pagination },
+  components: { ListingPost, Pagination, SortSelector },
 
-  //   async asyncData({ app }) {
-  //     const db = app.$firestore()
-  //     const postCollection = db.collection('posts')
-  //     try {
-  //       const postList = postCollection.orderBy('title', 'desc').limit(10).get()
-
-  //       return {
-  //         posts: postList
-  //       }
-  //     } catch (e) {
-  //       console.error(e)
-  //     }
-  //   },
   data: () => ({
+    isLoading: false,
     posts: [],
     pagination: {
       total: 0,
@@ -53,11 +50,14 @@ export default {
   },
   methods: {
     async loadPosts() {
+      this.isLoading = true
       const db = this.$firebase.firestore()
+
+      this.posts = []
 
       const querySnapshot = await db
         .collection('posts')
-        .orderBy('title', 'desc')
+        .orderBy('created_at', 'asc')
         .limit(this.pagination.per_page)
         .get()
       this.pagination.total = querySnapshot.size
@@ -67,8 +67,15 @@ export default {
           ...doc.data()
         })
       })
+      this.isLoading = false
       console.log(this.posts)
     },
+
+    loadMore() {
+      this.pagination.per_page += 10
+      this.loadPosts()
+    },
+
     async getPostsByAuthor(author) {
       const db = this.$firebase.firestore()
       const querySnapshot = await db
@@ -93,6 +100,7 @@ export default {
 .feed {
   display: flex;
   flex-direction: column;
+  padding-top: 30px;
   width: 100%;
   max-width: 600px;
 

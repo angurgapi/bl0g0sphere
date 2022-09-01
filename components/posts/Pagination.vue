@@ -1,16 +1,23 @@
 <template>
   <div class="pagination">
-    <button
-      v-for="(number, index) in totalPages"
-      :key="index"
-      class="pagination__button f-column"
-      :class="{
-        'pagination__button--current': number === currentPage
-      }"
-      @click="getPage(number)"
-    >
-      {{ number }}
-    </button>
+    <template v-if="!loadMore">
+      <div class="pagination__pages">
+        <button
+          v-for="(number, index) in totalPages"
+          :key="index"
+          class="pagination__button f-column"
+          :class="{
+            'pagination__button--current': number === currentPage
+          }"
+          @click="getPage(number)"
+        >
+          {{ number }}
+        </button>
+      </div>
+    </template>
+    <template v-else>
+      <button class="btn pagination__more" @click="$emit('more')">Еще</button>
+    </template>
   </div>
 </template>
 
@@ -21,6 +28,10 @@ export default {
     totalPages: {
       type: Number,
       required: true
+    },
+    loadMore: {
+      type: Boolean,
+      default: false
     },
     currentPage: {
       type: Number,
@@ -40,12 +51,24 @@ export default {
 
 <style lang="scss" scoped>
 .pagination {
-  display: inline-grid;
-  align-items: center;
-  grid-gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  margin: auto;
-  min-width: 300px;
+  &__pages {
+    display: inline-grid;
+    align-items: center;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    margin: auto;
+    min-width: 300px;
+  }
+
+  &__more {
+    border-radius: 0 0 10px 10px;
+    width: 100%;
+    background-color: rgb(25, 28, 31);
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 
   &__button {
     align-items: center;
