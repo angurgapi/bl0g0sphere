@@ -60,21 +60,20 @@ export default {
       for (let field in this.formData) {
         this.errors[field] = !this.formData[field].length
       }
-      console.log(this.errors)
+      // console.log(this.errors)
       return Object.values(this.errors).every((v) => v === false)
     },
     async sendPost() {
       if (this.validateForm()) {
         try {
           this.isLoading = true
-          const response = await this.$firebase
+          await this.$firebase
             .firestore()
             .collection('posts')
             .add({
               ...this.formData,
               created_at: new Date()
             })
-          console.log(response)
           this.$router.push('/')
         } catch (e) {
           console.log(e)

@@ -65,7 +65,7 @@ export default {
         .limit(this.pagination.per_page)
         .get()
       this.pagination.total = querySnapshot.size
-      console.log('size', querySnapshot.size)
+
       querySnapshot.forEach((doc) => {
         this.posts.push({
           id: doc.id,
@@ -82,24 +82,23 @@ export default {
 
     async getPostsByAuthor(author) {
       const db = this.$firebase.firestore()
-      const querySnapshot = await db
-        .collection('posts')
-        .where('author', '==', author)
-        .orderBy('title', 'desc')
-        .get()
+      try {
+        const querySnapshot = await db
+          .collection('posts')
+          .where('author', '==', author)
+          .orderBy('title', 'desc')
+          .get()
 
-      this.posts = []
-      querySnapshot.docs.forEach((doc) => {
-        this.posts.push({
-          id: doc.id,
-          ...doc.data()
+        this.posts = []
+        querySnapshot.docs.forEach((doc) => {
+          this.posts.push({
+            id: doc.id,
+            ...doc.data()
+          })
         })
-      })
-      //   else {
-      //     console.log('no snap by author')
-      //   }
-
-      console.log(author)
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

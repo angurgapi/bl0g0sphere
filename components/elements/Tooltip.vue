@@ -53,7 +53,9 @@ export default {
 .tooltip-trigger {
   position: relative;
   display: inline-block;
+  overflow-wrap: break-word;
   padding-left: 8px;
+  max-width: 100%;
 }
 
 .tooltip-trigger:hover .tooltip {

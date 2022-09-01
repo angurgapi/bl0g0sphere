@@ -1,7 +1,7 @@
 <template>
   <div class="navbar f-row">
     <nuxt-link class="navbar__link" to="/">
-      <svg-icon name="home" height="20" width="20" />
+      <svg-icon name="home" height="20" width="20" />bl0g0sphere
     </nuxt-link>
     <div class="navbar__right f-row">
       <nuxt-link class="navbar__link" to="/create">

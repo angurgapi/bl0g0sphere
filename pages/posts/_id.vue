@@ -92,6 +92,7 @@ export default {
 
 <style lang="scss" scoped>
 .post {
+  overflow-wrap: break-word;
   margin-bottom: 40px;
   padding: 20px;
   width: 100%;

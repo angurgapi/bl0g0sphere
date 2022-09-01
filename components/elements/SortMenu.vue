@@ -55,7 +55,6 @@ export default {
       this.isOpen = false
     },
     pickOption(val) {
-      console.log(val)
       this.selectedValue = val
       this.$emit('input', val)
       this.close()

@@ -60,6 +60,7 @@ export default {
 .post {
   display: flex;
   flex-direction: column;
+  overflow-wrap: break-word;
   color: rgb(25, 28, 31);
 
   &__header {
@@ -76,11 +77,14 @@ export default {
 
   &__footer {
     display: flex;
+    align-items: center;
     border-top: 1px solid #7b8ea7;
   }
 
   &__btn {
+    overflow: hidden;
     height: 22px;
+    max-width: 100%;
     color: #19249e;
   }
 
