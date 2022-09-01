@@ -1,5 +1,5 @@
 <template>
-  <div v-click-outside="close" class="sort-menu">
+  <div class="sort-menu" @mouseleave="close">
     <div class="sort-menu__option sort-menu__option--selected" @click="open">
       {{ getLabel }}
       <svg-icon
@@ -41,7 +41,10 @@ export default {
   }),
   computed: {
     getLabel() {
-      return this.label
+      return this.selectedValue
+        ? this.options.find((option) => option.value === this.selectedValue)
+            .label
+        : this.label
     }
   },
   methods: {
@@ -54,6 +57,8 @@ export default {
     pickOption(val) {
       console.log(val)
       this.selectedValue = val
+      this.$emit('input', val)
+      this.close()
     }
   }
 }
@@ -85,7 +90,6 @@ export default {
     }
 
     &--selected {
-      border-radius: 8px 8px 0 0;
       color: #192f80;
     }
   }

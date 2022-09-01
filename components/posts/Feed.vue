@@ -1,10 +1,10 @@
 <template>
   <div class="feed">
+    <SortSelector v-if="posts.length" v-model="sort.title" @input="loadPosts" />
     <template v-if="isLoading">
       <div class="loading"></div>
     </template>
     <template v-else>
-      <SortSelector />
       <div class="feed__posts">
         <ul class="feed__list">
           <li v-for="post in posts" :key="post.id">
@@ -38,6 +38,10 @@ export default {
       total: 0,
       currentPage: 1,
       per_page: 10
+    },
+    sort: {
+      //   created_at: 'desc',
+      title: 'asc'
     }
   }),
   async fetch() {
@@ -57,10 +61,11 @@ export default {
 
       const querySnapshot = await db
         .collection('posts')
-        .orderBy('created_at', 'asc')
+        .orderBy('title', this.sort.title)
         .limit(this.pagination.per_page)
         .get()
       this.pagination.total = querySnapshot.size
+      console.log('size', querySnapshot.size)
       querySnapshot.forEach((doc) => {
         this.posts.push({
           id: doc.id,
@@ -68,7 +73,6 @@ export default {
         })
       })
       this.isLoading = false
-      console.log(this.posts)
     },
 
     loadMore() {
@@ -83,13 +87,18 @@ export default {
         .where('author', '==', author)
         .orderBy('title', 'desc')
         .get()
+
       this.posts = []
-      querySnapshot.forEach((doc) => {
+      querySnapshot.docs.forEach((doc) => {
         this.posts.push({
           id: doc.id,
           ...doc.data()
         })
       })
+      //   else {
+      //     console.log('no snap by author')
+      //   }
+
       console.log(author)
     }
   }

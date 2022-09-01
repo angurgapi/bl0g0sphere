@@ -16,18 +16,34 @@
       </div>
       <span class="post__date">Опубликовано {{ getPostDate }}</span>
     </div>
+    <CommentSection v-if="comments.length" :comments="comments" />
   </div>
 </template>
 
 <script>
+import CommentSection from '@/components/posts/CommentSection'
 export default {
   name: 'PostPage',
+  components: { CommentSection },
   data: () => ({
     post: {},
-    isLoading: false
+    isLoading: false,
+    comments: [
+      // {
+      //   id: 1,
+      //   author: 'Chad',
+      //   content: 'alkdjaksdl kasdjalksdj alkdsjalkds aklds'
+      // },
+      // {
+      //   id: 10,
+      //   author: 'Chad',
+      //   content: 'alkdjaksdl kasdjalksdj alkdsjalkds aklds'
+      // }
+    ]
   }),
   async fetch() {
     await this.getPostData()
+    await this.getPostComments()
   },
   computed: {
     getPostDate() {
@@ -46,12 +62,29 @@ export default {
 
       const snap = await db.collection('posts').doc(this.$route.params.id).get()
       if (snap.exists) {
-        console.log(snap.data())
         this.post = snap.data()
       } else {
         console.log('error')
       }
       this.isLoading = false
+    },
+    async getPostComments() {
+      const db = this.$firebase.firestore()
+      try {
+        const querySnapshot = await db
+          .collection('comments')
+          .orderBy('created_at', 'desc')
+          .where('post_id', '==', this.$route.params.id)
+          .get()
+        querySnapshot.docs.forEach((doc) => {
+          this.comments.push({
+            id: doc.id,
+            ...doc.data()
+          })
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
@@ -59,8 +92,11 @@ export default {
 
 <style lang="scss" scoped>
 .post {
+  margin-bottom: 40px;
   padding: 20px;
+  width: 100%;
   height: 100%;
+  max-width: 600px;
 
   &__title {
     font-weight: 600;

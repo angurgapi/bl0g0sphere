@@ -14,7 +14,10 @@
       <div class="post__footer">
         <span class="post__author">автор: </span>
         <Tooltip text="Показать все новости автора">
-          <button class="btn post__btn" @click="$emit('getAll', post.author)">
+          <button
+            class="btn post__btn"
+            @click.prevent="$emit('getAll', post.author)"
+          >
             {{ post.author }}
           </button>
         </Tooltip>
@@ -78,7 +81,6 @@ export default {
 
   &__btn {
     height: 22px;
-    font-size: 20px;
     color: #19249e;
   }
 

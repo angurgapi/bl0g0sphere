@@ -1,11 +1,12 @@
 <template>
   <div class="sort-selector">
     <span class="sort-selector__title">Сортировать</span>
-    <SortMenu v-model="sort.dateOrder" :options="dateOptions" label="по дате" />
+    <!-- <SortMenu v-model="sort.dateOrder" :options="dateOptions" label="по дате" /> -->
     <SortMenu
       v-model="sort.titleOrder"
       :options="titleOptions"
       label="по заголовку"
+      @input="$emit('input', sort.titleOrder)"
     />
   </div>
 </template>
@@ -17,19 +18,18 @@ export default {
   components: { SortMenu },
   data: () => ({
     sort: {
-      dateOrder: '',
-      titleOrder: ''
+      titleOrder: 'desc'
     },
-    dateOptions: [
-      {
-        label: 'Сначала старые',
-        value: 'asc'
-      },
-      {
-        label: 'Сначала новые',
-        value: 'desc'
-      }
-    ],
+    // dateOptions: [
+    //   {
+    //     label: 'Сначала старые',
+    //     value: 'asc'
+    //   },
+    //   {
+    //     label: 'Сначала новые',
+    //     value: 'desc'
+    //   }
+    // ],
     titleOptions: [
       {
         label: 'а-я',
@@ -48,5 +48,9 @@ export default {
 .sort-selector {
   display: flex;
   align-items: center;
+
+  &::v-deep .sort-menu {
+    margin-left: 16px;
+  }
 }
 </style>
