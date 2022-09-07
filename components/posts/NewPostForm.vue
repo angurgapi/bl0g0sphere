@@ -6,15 +6,18 @@
       >Это обязательное поле</span
     >
     <span class="post-form__label">Содержание</span>
-    <textarea
+    <!-- <textarea
       v-model="formData.content"
       class="post-form__input post-form__input--textarea"
       rows="5"
-    >
-    </textarea>
+    ></textarea> -->
+    <TinyMceEditor v-model="formData.content" />
+
     <span v-if="errors.content" class="post-form__warning"
       >Это обязательное поле</span
     >
+    <span class="post-form__label">Иллюстрации</span>
+    <DropzoneWidget v-model="images" />
     <span class="post-form__label">Автор</span>
     <input v-model="formData.author" type="text" class="post-form__input" />
     <span v-if="errors.author" class="post-form__warning"
@@ -37,8 +40,12 @@
 </template>
 
 <script>
+import DropzoneWidget from '@/components/elements/DropzoneWidget'
+import TinyMceEditor from '@/components/elements/TinyMceEditor'
+
 export default {
   name: 'PostForm',
+  components: { DropzoneWidget, TinyMceEditor },
   data: () => ({
     isLoading: false,
     formData: {
@@ -47,6 +54,7 @@ export default {
       content: '',
       email: ''
     },
+    images: [],
     errors: {
       email: false,
       title: false,
@@ -72,6 +80,7 @@ export default {
             .collection('posts')
             .add({
               ...this.formData,
+              images: this.images,
               created_at: new Date()
             })
           this.$router.push('/')

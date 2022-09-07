@@ -4,8 +4,8 @@
       <div class="post__header">{{ post.title }}</div>
       <div class="post__body">
         <p class="post__content">
-          {{ getPreviewText
-          }}<span v-if="isPostLong" class="post__more"
+          <span v-html="getPreviewText" />
+          <span v-if="isPostLong" class="post__more"
             >...читать продолжение в источнике</span
           >
         </p>
