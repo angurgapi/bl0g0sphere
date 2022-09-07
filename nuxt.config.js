@@ -1,8 +1,9 @@
 const currentTime = new Date().getTime()
+require('dotenv').config()
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
-  target: 'static', 
+  target: 'static',
   head: {
     title: 'bl0g0sphere',
     htmlAttrs: {
@@ -21,9 +22,16 @@ export default {
   static: {
     prefix: false
   },
+  publicRuntimeConfig: {
+    tinymceToken: process.env.TINYMCE
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/global-components', '~/plugins/firebase'],
+  plugins: [
+    '@/plugins/global-components',
+    '~/plugins/firebase',
+    { src: '~/plugins/vue-tinymce-editor.js', mode: 'client' }
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -32,7 +40,7 @@ export default {
   buildModules: ['@nuxtjs/moment'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/svg-sprite', '@nuxtjs/axios'],
+  modules: ['@nuxtjs/svg-sprite', '@nuxtjs/axios', '@nuxtjs/dotenv'],
 
   svgSprite: {
     input: '~/assets/icons/'

@@ -2,17 +2,23 @@
   <div class="page">
     <div class="post card">
       <span class="post__title">{{ post.title }}</span>
-      <span class="post__body">{{ post.content }}</span>
+      <span class="post__body" v-html="post.content"></span>
+      <template v-if="post.images">
+        <div
+          class="post__cover"
+          :style="`background-image: url(${post.images[0]})`"
+        />
+      </template>
       <div class="post__footer f-row">
-        <p class="post__author">
+        <div class="post__author f-row">
           Автор: {{ post.author
           }}<a
             v-if="post.email"
             :href="`mailto:${post.email}`"
             class="post__email"
-            >{{ post.email }}</a
+            ><svg-icon name="envelope" />{{ post.email }}</a
           >
-        </p>
+        </div>
       </div>
       <span class="post__date">Опубликовано {{ getPostDate }}</span>
     </div>
@@ -22,24 +28,14 @@
 
 <script>
 import CommentSection from '@/components/posts/CommentSection'
+
 export default {
   name: 'PostPage',
   components: { CommentSection },
   data: () => ({
     post: {},
     isLoading: false,
-    comments: [
-      // {
-      //   id: 1,
-      //   author: 'Chad',
-      //   content: 'alkdjaksdl kasdjalksdj alkdsjalkds aklds'
-      // },
-      // {
-      //   id: 10,
-      //   author: 'Chad',
-      //   content: 'alkdjaksdl kasdjalksdj alkdsjalkds aklds'
-      // }
-    ]
+    comments: []
   }),
   async fetch() {
     await this.getPostData()
@@ -104,14 +100,29 @@ export default {
     font-size: 24px;
   }
 
+  &__cover {
+    margin-top: 16px;
+    width: 100%;
+    height: 200px;
+    background-position: center;
+    background-size: cover;
+  }
+
   &__body {
     margin-top: 24px;
     text-align: justify;
   }
 
   &__email {
+    display: flex;
+    align-items: center;
     margin-left: 16px;
     color: #22345e;
+
+    svg {
+      width: 16px;
+      height: 12px;
+    }
   }
 
   &__footer {

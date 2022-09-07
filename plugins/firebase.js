@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+import { getStorage } from 'firebase/storage'
 
 export default ({ env, store }, inject) => {
   const firebaseConfig = {
@@ -16,6 +17,7 @@ export default ({ env, store }, inject) => {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig)
   }
+  const storage = getStorage()
 
   inject('firebase', firebase)
 }
