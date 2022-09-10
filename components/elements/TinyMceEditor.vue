@@ -10,10 +10,10 @@
       plugins: [
         'advlist autolink lists link image',
         'searchreplace visualblocks code fullscreen',
-        'insertdatetime table wordcount'
+        'insertdatetime table wordcount textcolor'
       ],
       toolbar:
-        'formatselect | bold italic backcolor | \
+        'formatselect | bold italic forecolor backcolor | \
            alignleft aligncenter alignright alignjustify | \
            bullist numlist outdent indent | removeformat'
     }"
