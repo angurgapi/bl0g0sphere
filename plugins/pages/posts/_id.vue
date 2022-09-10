@@ -43,14 +43,12 @@ export default {
   },
   computed: {
     getPostDate() {
-      if (this.post?.created_at) {
-        return (
-          this.$moment
-            .unix(this.post.created_at.seconds, 'YYYY-MM-DD')
-            .format('DD MMM HH:mm') ||
-          this.$moment.utc(this.post.created_at).format('DD MMM HH:mm')
-        )
-      }
+      return (
+        this.$moment
+          .unix(this.post.created_at.seconds, 'YYYY-MM-DD')
+          .format('DD MMM HH:mm') ||
+        this.$moment.utc(this.post.created_at).format('DD MMM HH:mm')
+      )
     }
   },
   methods: {
