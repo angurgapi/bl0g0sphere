@@ -12,6 +12,12 @@
     "stylelint:fix": "npx stylelint --fix **/*.{vue,scss}",
     "generate": "nuxt generate"
   },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "3000"
+    }
+   },
   "lint-staged": {
     "*.{js,vue}": "eslint",
     "*.{scss,vue}": "npx stylelint"
