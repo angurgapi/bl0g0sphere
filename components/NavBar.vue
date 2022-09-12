@@ -15,6 +15,9 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  mounted() {
+    this.kek()
+  }
 }
 </script>
